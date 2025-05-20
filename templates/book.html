@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Бронирование</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <h1>Бронирование номера</h1>
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <p class="{{ category }}">{{ message }}</p>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+        <form method="POST">
+            <label for="guest_name">Имя гостя:</label>
+            <input type="text" id="guest_name" name="guest_name" required>
+            <label for="passport">Паспорт:</label>
+            <input type="text" id="passport" name="passport" required>
+            <label for="phone">Телефон:</label>
+            <input type="text" id="phone" name="phone">
+            <label for="room_id">Номер:</label>
+            <select id="room_id" name="room_id" required>
+                {% for room in rooms %}
+                    <option value="{{ room.room_id }}">{{ room.room_number }} ({{ room.type_room }})</option>
+                {% endfor %}
+            </select>
+            <label for="check_in">Дата заезда:</label>
+            <input type="date" id="check_in" name="check_in" required>
+            <label for="check_out">Дата выезда:</label>
+            <input type="date" id="check_out" name="check_out" required>
+            <label for="employee_id">Сотрудник:</label>
+            <select id="employee_id" name="employee_id" required>
+                {% for employee in employees %}
+                    <option value="{{ employee.employees_id }}">{{ employee.employees_name }} ({{ employee.position }})</option>
+                {% endfor %}
+            </select>
+            <div class="button-container">
+                <input type="submit" value="Забронировать" class="button">
+                <a href="{{ url_for('index') }}" class="button">Назад</a>
+            </div>
+        </form>
+    </div>
+</body>
+</html>
