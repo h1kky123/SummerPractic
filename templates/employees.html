@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Список сотрудников</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <h1>Список сотрудников</h1>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <p class="{{ category }}">{{ message }}</p>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+    <!-- Форма для добавления сотрудника -->
+    <h2>Добавить сотрудника</h2>
+    <form method="POST">
+        <label>Имя сотрудника:</label>
+        <input type="text" name="employees_name" required><br>
+        <label>Должность:</label>
+        <input type="text" name="position" required><br>
+        <label>Телефон:</label>
+        <input type="text" name="phone"><br>
+        <input type="submit" name="add_employee" value="Добавить" class="button">
+    </form>
+
+    <!-- Таблица сотрудников -->
+    <h2>Существующие сотрудники</h2>
+    <table>
+        <tr>
+            <th>ID</th>
+            <th>Имя</th>
+            <th>Должность</th>
+            <th>Телефон</th>
+            <th>Действия</th>
+        </tr>
+        {% for employee in employees %}
+            <tr>
+                <td>{{ employee.employees_id }}</td>
+                <td>{{ employee.employees_name }}</td>
+                <td>{{ employee.position }}</td>
+                <td>{{ employee.phone }}</td>
+                <td>
+                    <form method="POST" action="{{ url_for('employees') }}" style="display:inline;">
+                        <input type="hidden" name="employee_id" value="{{ employee.employees_id }}">
+                        <input type="submit" name="delete_employee" value="Удалить" class="button" onclick="return confirm('Вы уверены?');">
+                    </form>
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
+
+    <div class="button-container">
+        <a href="{{ url_for('index') }}" class="button">Назад</a>
+    </div>
+</body>
+</html>
