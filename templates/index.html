@@ -4,15 +4,13 @@
     <meta charset="UTF-8">
     <title>Управление гостиницей</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
 </head>
 <body>
-    <div class="container">
-        <h1>Управление гостиницей</h1>
-        <div class="button-container">
-            <a href="{{ url_for('book') }}" class="button">Забронировать</a>
-            <a href="{{ url_for('view') }}" class="button">Просмотр записей</a>
-        </div>
+    <h1>Управление гостиницей</h1>
+    <div class="button-container">
+        <a href="{{ url_for('book') }}" class="button">Забронировать</a>
+        <a href="{{ url_for('view') }}" class="button">Просмотр записей</a>
+        <a href="{{ url_for('employees') }}" class="button">Сотрудники</a>
     </div>
 </body>
 </html>
