@@ -2,46 +2,43 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <title>Редактирование бронирования</title>
+    <title>Редактировать бронирование</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
 </head>
 <body>
-    <div class="container">
-        <h1>Редактирование бронирования</h1>
-        {% with messages = get_flashed_messages(with_categories=true) %}
-            {% if messages %}
-                {% for category, message in messages %}
-                    <p class="{{ category }}">{{ message }}</p>
-                {% endfor %}
-            {% endif %}
-        {% endwith %}
-        <form method="POST">
-            <label for="room_id">Номер:</label>
-            <select id="room_id" name="room_id" required>
-                {% for room in rooms %}
-                    <option value="{{ room.room_id }}" {% if room.room_id == booking.room_book_id %}selected{% endif %}>
-                        {{ room.room_number }} ({{ room.type_room }})
-                    </option>
-                {% endfor %}
-            </select>
-            <label for="check_in">Дата заезда:</label>
-            <input type="date" id="check_in" name="check_in" value="{{ booking.check_in_date }}" required>
-            <label for="check_out">Дата выезда:</label>
-            <input type="date" id="check_out" name="check_out" value="{{ booking.check_out_date }}" required>
-            <label for="employee_id">Сотрудник:</label>
-            <select id="employee_id" name="employee_id" required>
-                {% for employee in employees %}
-                    <option value="{{ employee.employees_id }}" {% if employee.employees_id == booking.employee_book_id %}selected{% endif %}>
-                        {{ employee.employees_name }} ({{ employee.position }})
-                    </option>
-                {% endfor %}
-            </select>
-            <div class="button-container">
-                <input type="submit" value="Сохранить" class="button">
-                <a href="{{ url_for('view') }}" class="button">Назад</a>
-            </div>
-        </form>
-    </div>
+    <h1>Редактировать бронирование</h1>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <p class="{{ category }}">{{ message }}</p>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+    <form method="POST">
+        <label>Дата заезда:</label>
+        <input type="date" name="check_in" value="{{ booking.check_in_date }}" required>
+        <label>Дата выезда:</label>
+        <input type="date" name="check_out" value="{{ booking.check_out_date }}" required>
+        <label>Номер:</label>
+        <select name="room_id" required>
+            {% for room in rooms %}
+                <option value="{{ room.room_id }}" {% if room.room_id == booking.room_book_id %}selected{% endif %}>
+                    {{ room.room_number }} - {{ room.room_type }}
+                </option>
+            {% endfor %}
+        </select>
+        <label>Сотрудник:</label>
+        <select name="employee_id" required>
+            {% for employee in employees %}
+                <option value="{{ employee.employees_id }}" {% if employee.employees_id == booking.employee_book_id %}selected{% endif %}>
+                    {{ employee.employees_name }} - {{ employee.position }}
+                </option>
+            {% endfor %}
+        </select>
+        <div class="button-container">
+            <input type="submit" value="Обновить" class="button">
+            <a href="{{ url_for('view') }}" class="button">Назад</a>
+        </div>
+    </form>
 </body>
 </html>
