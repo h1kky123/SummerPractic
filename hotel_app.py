@@ -3,7 +3,7 @@ import mysql.connector
 from mysql.connector import Error
 
 app = Flask(__name__)
-app.secret_key = 'your_secret_key'
+app.secret_key = '1111'
 
 # Настройки подключения к MySQL
 db_config = {
@@ -139,6 +139,43 @@ def delete(booking_id):
         cursor.close()
         conn.close()
     return redirect(url_for('view'))
+
+@app.route('/employees', methods=['GET', 'POST'])
+def employees():
+    conn = get_db_connection()
+    cursor = conn.cursor(dictionary=True)
+
+    if request.method == 'POST':
+        if 'add_employee' in request.form:
+            employees_name = request.form['employees_name']
+            position = request.form['position']
+            phone = request.form['phone']
+
+            try:
+                cursor.execute(
+                    "INSERT INTO Employees (employees_name, position, phone) VALUES (%s, %s, %s)",
+                    (employees_name, position, phone)
+                )
+                conn.commit()
+                flash('Сотрудник успешно добавлен!', 'success')
+            except Error as e:
+                conn.rollback()
+                flash(f'Ошибка при добавлении сотрудника: {e}', 'error')
+        elif 'delete_employee' in request.form:
+            employee_id = request.form['employee_id']
+            try:
+                cursor.execute("DELETE FROM Employees WHERE employees_id = %s", (employee_id,))
+                conn.commit()
+                flash('Сотрудник успешно удалён!', 'success')
+            except Error as e:
+                conn.rollback()
+                flash(f'Ошибка при удалении сотрудника: {e}', 'error')
+
+    cursor.execute("SELECT * FROM Employees")
+    employees = cursor.fetchall()
+    cursor.close()
+    conn.close()
+    return render_template('employees.html', employees=employees)
 
 if __name__ == '__main__':
     app.run(debug=True)
